@@ -11,6 +11,11 @@ This project contains a PowerShell script designed to automate the provisioning 
 - Implements retry logic to handle any errors.
 - Customizable site titles, descriptions, and URLs based on predefined department and committee names.
 
+## Screenshot
+
+![Script Execution](./Assets/screenshot.png)
+ _Screenshot of the script execution in PowerShell terminal_
+
 ## Prerequisites
 
 - [PowerShell 5.1 or later](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
