@@ -1,13 +1,13 @@
 # Variables
-$numSites = 5  ## Change this value to the number of sites you want to create ##
+$numSites = XXXX  ## Change this value to the number of sites you want to create ##
 
-$tenantUrl = "https://masamuneindustries.sharepoint.com"
-$templateUrl = "https://masamuneindustries.sharepoint.com/sites/PNPTemplates/PNP_Templates/contosoworks.pnp"
-$templateSite = "https://masamuneindustries.sharepoint.com/sites/PNPTemplates"
+$tenantUrl = "https://XXXXX.sharepoint.com"
+$templateUrl = "https://XXXXXXX.sharepoint.com/sites/PNPTemplates/PNP_Templates/contosoworks.pnp"   ## Can be changed for any other uploaded template too.
+$templateSite = "https://XXXXXXX.sharepoint.com/sites/PNPTemplates"
 $templateFilePath = "/sites/PNPTemplates/PNP_Templates/contosoworks.pnp"
 $localTemplatePath = "C:\temp\contosoworks.pnp"
 $tempFolderPath = "C:\temp"
-$siteOwner = "timbroderick@masamuneindustries.onmicrosoft.com"
+$siteOwner = "XXXXXXX@XXXXXX.onmicrosoft.com"
 
 # Custom department and committee names
 $CustomData = @{
@@ -23,10 +23,11 @@ $CustomData = @{
     "Athlead Development", "Wuphf.com Operations", "Janitorial Humor", "Conference Room Scheduling", "Muckduck Analysis", "Workplace Safety Drills", 
     "Threat Level Midnight Production", "Procurement of Office Supplies", "Dunder Mifflin Infinity Support", "Finer Things Club", "Crossword Puzzles",
     "Pretending to Care", "Dunder Mifflin Olympics", "Office Romance Management", "Dunder Mifflin Infinity Training", "Dunder Mifflin Infinity Sales")
-    committee = @("Council of", "League of", "Cabal of", "Order of", "Squad of", "Guild of", "Society of", "Fellowship of", "Assembly of", "Horde of", "Band of", 
-    "Consortium of", "Congregation of", "Tribe of", "Coterie of", "Crew of", "Clan of", "Brigade of", "Alliance of", "Circle of", "Union of", "Coalition of",
-    "Federation of", "Syndicate of", "Network of", "Confederation of", "Corporation of", "Corps of", "Division of", "Sect of", "Chapter of", "Department of",
-    "Office of", "Bureau of", "Agency of", "Institute of", "Center of", "Foundation of", "Incorporated of", "Corporation of", "Company of", "Association of")
+    
+    committee = @("Council", "League", "Cabal", "Order of", "Squad", "Guild", "Society", "Fellowship", "Assembly", "Horde", "Band", "Team", "Group", 
+    "Task Force", "Force", "Consortium", "Congregation", "Tribe", "Coterie", "Crew", "Clan", "Brigade", "Alliance", "Circle", "Union", "Coalition",
+    "Federation", "Syndicate", "Network", "Confederation", "Corporation", "Corps", "Division", "Sect", "Chapter", "Department",
+    "Office", "Bureau", "Agency", "Institute", "Center ", "Foundation", "Incorporated", "Corporation", "Company", "Association")
 }
 
 # Ensure the temp folder exists
@@ -48,19 +49,26 @@ if (-not (Get-Module -ListAvailable -Name PnP.PowerShell)) {
 }
 Import-Module PnP.PowerShell
 
+Write-Host "Connecting to main site $siteUrl to apply the template (Attempt $try)"
+
+# Download template locally
+Write-Host "Downloading PnP template from $templateUrl"
+Connect-PnPOnline -Url $templateSite -Interactive
+Get-PnPFile -Url $templateFilePath -Path $tempFolderPath -FileName "contosoworks.pnp" -AsFile -force
+
 # Generate random site details
 function Get-RandomSiteDetails {
     $department = Invoke-Generate "[department]" -CustomData $CustomData
     $committee = Invoke-Generate "[committee]" -CustomData $CustomData 
-    $title = "$committee $department"
-    $description = "The $committee of $department site"
-    $url = Invoke-Generate "$committee$department-[state abbr]##" -CustomData $CustomData
+    $title = "The $department $committee"
+    $description = "Internal communications and project collaboration for the $department $committee"
+    $url = Invoke-Generate "$department$committee-[state abbr]##" -CustomData $CustomData
     $url = $url -replace '\s', '' 
     return [PSCustomObject]@{
         Title       = $title
         Description = $description
         URL         = "$tenantUrl/sites/$url"
-        BenefitsTitle = "$department Benefits"
+        BenefitsTitle = "The $department $committee Benefits"
         BenefitsUrl = "$tenantUrl/sites/$url-benefits"
     }
 }
@@ -82,14 +90,8 @@ function InitialiseTemplate {
             Write-Host "================================================================================="
             Write-Host "Attempt $try to apply template to site: $siteTitle"
             Write-Host "================================================================================="
-            Write-Host "Connecting to main site $siteUrl to apply the template (Attempt $try)"
+
             Connect-PnPOnline -Url $siteUrl -Interactive
-            
-            # Download template locally
-            Write-Host "Downloading PnP template from $templateUrl"
-            Connect-PnPOnline -Url $templateSite -Interactive
-            Get-PnPFile -Url $templateFilePath -Path $tempFolderPath -FileName "contosoworks.pnp" -AsFile
-            
             Write-Host "Applying template to main site $siteTitle at $siteUrl (Attempt $try)"
             Invoke-PnPTenantTemplate -Path $localTemplatePath -Parameters @{
                 "SiteTitle" = $siteTitle
@@ -152,8 +154,8 @@ for ($i = 1; $i -le $numSites; $i++) {
         Write-Host "Successfully created benefits site: $($siteDetails.BenefitsTitle)" 
         Write-Host "URL:                                $($siteDetails.BenefitsUrl)"
         Write-Host "================================================================================="
-        Write-Host "Waiting 60 seconds before applying template to main site... It's a bit sensitive..."
-        Start-Sleep -Seconds 60
+        Write-Host "Waiting 10 seconds before applying template to main site... It's a bit sensitive..."
+        Start-Sleep -Seconds 10
 
         # Apply the main template to the main site with retry logic
         InitialiseTemplate -siteTitle $siteDetails.Title -siteUrl $siteDetails.URL -benefitsTitle $siteDetails.BenefitsTitle -benefitsUrl $siteDetails.BenefitsUrl

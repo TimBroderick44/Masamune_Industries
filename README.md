@@ -16,6 +16,15 @@ This project contains a PowerShell script designed to automate the provisioning 
 ![Script Execution](./Assets/screenshot.png)
  _Screenshot of the script execution in PowerShell terminal_
 
+![SharePoint Site Creation](./Assets/sharepoint.png)
+_Screenshot of the hub site applied by the script_
+
+![SharePoint Site Creation](./Assets/sharepoint2.png)
+_Screenshot of the subsite applied by the script_
+
+![Script Retry](./Assets/retry.png)
+_Screenshot of the script retrying after an error_
+
 ## Prerequisites
 
 - [PowerShell 5.1 or later](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
@@ -42,9 +51,9 @@ This project contains a PowerShell script designed to automate the provisioning 
    Install-Module -Name NameIT -Scope CurrentUser -Force -AllowClobber
    ```
 4. **Implement Variables and Run the Script**:
-   - Open the `CreateSites.ps1` script in a text editor.
-   - Customize the variables at the top of the script as needed (_See below for usage_).
-   - Through the PowerShell terminal, go to the directory with the 'CreateSites.ps1' file and run the script.
+   - Open the `CreateSites.ps1` script.
+   - Customize and/or confirm the variables at the top of the script as needed (_See below for usage_).
+   - Through the PowerShell terminal, go to the directory with the 'CreateSites.ps1' file and run the script (_i.e. the cloned repo from step 1_).
    ```bash
    .\CreateSites.ps1
    ```
@@ -74,16 +83,18 @@ The `CreateSites.ps1` script has the following variables that can be customized:
 
 ## Challenges and Lessons:
 
-- **PowerShell Scripting**: At first, I was unfamiliar with PowerShell scripting, but after working on this project, I have gained a much stronger understanding of the language and its capabilities.
-- **PnP Templates**: Gained experience in working with PnP templates for SharePoint. Specifically, the structure of XML files and its syntax.
+- **PowerShell Scripting**: At first, I was unfamiliar with PowerShell scripting, but after working on this project, I have gained a much stronger understanding of the language and its capabilities. Even beyond the scope of this project, it'll be applicable to other tasks and projects in the future.
+- **PnP Templates**: Gained experience in working with PnP templates for SharePoint. Specifically, the structure of XML files and its syntax. I still have some difficulties understanding how it goes through the XML and applies it to the screen. With practice, I'll get there; however, for now, I much prefer traditional front-end development (i.e. React with TypeScript).
 - **Azure Integration**: Explored methods for automating processes with Azure services. For example, Azure Functions or Power Automate (Not implemented in this project... _yet_...)
-- **Error Handling**: Trying to get more verbose and expletive error handling in the script. This was a challenge as when errors arose, it was often difficult to pinpoint the exact cause and/or get detailed error messages.
+- **Error Handling**: Trying to get more verbose and expletive error handling in the script. This was a challenge as when errors arose, it was often difficult to pinpoint the exact cause and/or get detailed error messages. To date, I still have CSOM errors and am not sure how to get more verbose or accurate information on how to resolve these kinds of errors.
 
 ## Future Improvements
 
+- **Batching and Asynchronous Processing**: Implement batching and asynchronous processing to create sites more efficiently. I did try to implement this, but there were issues with throttling. It's definitely something that I'll be revisiting.
 - **Scalability**: Optimize the script for better performance with large-scale site creation. For example, create a wider variety of templates for different departments and committees.
 - **Customization**: Add more customization options for site creation and template application.
 - **Automation**: Research and implement automation for the script using Azure Functions or Power Automate.
+- **Error Handling**: Research improving error handling and logging to provide more detailed information on errors and how to resolve them.
 
 ## Contact
 
