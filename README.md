@@ -1,8 +1,20 @@
-# Masamune Industries SharePoint Site Provisioning
+# Masamune Industries SharePoint Site Provisioning <!-- omit in toc -->
 
-## Overview
+## Overview <!-- omit in toc -->
 
 This project contains a PowerShell script designed to automate the provisioning of SharePoint sites using PnP (Patterns and Practices) templates. The script leverages the SharePoint Online Management Shell and PnP PowerShell modules to create multiple sites efficiently while applying a [predefined template](https://github.com/SharePoint/sp-dev-provisioning-templates/blob/master/tenant/contosoworks/contosoworks.pnp) to each site. The script is designed to be flexible and customizable, allowing users to specify the number of sites to create, the site names, URLs, and descriptions, and the template to apply to each site. The script also includes retry logic to handle any errors that could occur during site creation.
+
+## Table of Contents <!-- omit in toc -->
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [The Script](#the-script)
+  - [How Can We Use Azure to Apply the Template on Demand?](#how-can-we-use-azure-to-apply-the-template-on-demand)
+  - [Integrating the Solution into Other Systems:](#integrating-the-solution-into-other-systems)
+- [Setup](#setup)
+  - [Variables](#variables)
+- [Challenges and Lessons:](#challenges-and-lessons)
+- [Future Improvements](#future-improvements)
+- [Contact](#contact)
 
 ## Features
 
@@ -11,7 +23,8 @@ This project contains a PowerShell script designed to automate the provisioning 
 - Implements retry logic to handle any errors.
 - Customizable site titles, descriptions, and URLs based on predefined department and committee names.
 
-## Screenshot
+
+## Screenshots ##
 
 ![Script Execution](./Assets/screenshot.png)
  _Screenshot of the script execution in PowerShell terminal_
@@ -25,7 +38,7 @@ _Screenshot of the subsite applied by the script_
 ![Script Retry](./Assets/retry.png)
 _Screenshot of the script retrying after an error_
 
-#### NOTE: The template used above was altered so that it was more applicable for an organisation based in Australia (e.g. dates were altered, terminology was changed, etc.)
+#### NOTE: The template used above was altered so that it was more applicable for an organisation based in Australia (e.g. dates were altered, terminology was changed, etc.) <!-- omit in toc -->
 
 ## The Script
 
@@ -215,8 +228,67 @@ Write-Host "====================================================================
 Write-Host "Script execution completed!"
 Write-Host "================================================================================="
 ```
+### How Can We Use Azure to Apply the Template on Demand? 
 
-## Prerequisites
+**Azure Functions**: Create an Azure Function that can be triggered by an HTTP request. For example, if another team needed a new site, they could trigger the Azure Function through a custom application or a Power Automate flow to create the site automatically.
+
+### Benefits : <!-- omit in toc -->
+- **Scalability**: Azure Functions can scale automatically based on demand, allowing for the creation of multiple sites simultaneously.
+- **Cost-Effective**: Azure Functions are serverless and only charge for the resources used, making them cost-efficient for low-traffic tasks.
+- **Integration**: Azure Functions can easily integrate with other Azure services to create a comprehensive automation solution.
+
+**Azure Logic Apps**: Create an Azure Logic App that can be triggered by an event (e.g., a new file uploaded to a storage account). For example, if the HR department uploads a new policy document, the Logic App could trigger the creation of a SharePoint site for policy distribution and discussion.
+
+### Benefits : <!-- omit in toc -->
+
+- **Event-Driven**: Automatically responds to specific events, making it ideal for automating workflows triggered by changes in data or state.
+- **Integration**: Can integrate with a wide range of Azure and third-party services, providing flexibility in automation scenarios.
+- **Ease of Use**: Offers a visual designer for creating workflows, which simplifies the process of setting up and managing complex workflows.
+
+**Azure Automation**: Create an Azure Automation Runbook that can be triggered by an event or on a schedule. For example, the HR department can schedule the creation of SharePoint sites for regular team meetings.
+
+### Benefits : <!-- omit in toc -->
+- **Scheduled Tasks**: Automates regular tasks without manual intervention, ensuring consistency and reliability.
+- **Comprehensive Management**: Provides detailed logging and monitoring capabilities, making it easier to manage and troubleshoot automation tasks.
+- **Integration**: Can integrate with other Azure services and on-premises systems, providing a robust solution for hybrid environments.
+
+**Power Automate**: Create a Power Automate flow that can be triggered by an event (e.g., a new team is created in Microsoft Teams). For example, when HR creates a new team in Microsoft Teams, Power Automate can trigger the creation of a corresponding SharePoint site.
+
+### Benefits : <!-- omit in toc -->
+- **Integration with Microsoft 365**: Seamlessly integrates with Microsoft Teams and other Microsoft 365 services, providing a cohesive user experience.
+- **Automation**: Automates the creation of collaboration spaces, reducing manual workload and ensuring consistency.
+- **User-Friendly**: Provides a user-friendly interface for creating and managing automation workflows, making it accessible to non-technical users.
+
+### Integrating the Solution into Other Systems:
+
+1. **API Integration**: Expose the Azure Function as a REST API endpoint that other systems can call to provision SharePoint sites.
+
+    ***Example***: Integrate with a project management tool (e.g. Jira, Trello) to automatically provision a SharePoint site when a new project is created.
+
+    ### Benefits: <!-- omit in toc -->
+      - **Centralized Management**: Allows different systems to initiate site provisioning through a single API endpoint, centralizing control.
+      - **Automation**: Automates the creation of SharePoint sites based on project creation events.
+      - **Scalability**: Can handle multiple requests simultaneously, making it suitable for large organizations with frequent site provisioning needs.
+  
+2. **Webhooks**: Use webhooks to notify other systems (e.g., Slack, Microsoft Teams) when a new site is provisioned.
+
+      ***Example***: Send a notification to a Microsoft Teams channel when a new SharePoint site is created for an HR project.
+
+    ### Benefits: <!-- omit in toc -->
+      - **Real-Time Notifications**: Provides instant updates to relevant stakeholders when new sites are created.
+      - **Integration**: Easily integrates with communication tools like Slack and Microsoft Teams to keep teams informed.
+      - **Transparency**: Enhances visibility of site provisioning activities across the organization.
+
+3. **Custom Applications**: Integrate the site provisioning process into custom business applications, such as a project management tool, using API calls.
+
+    ***Example***: Automatically create a SharePoint site from a custom HR application when a new employee onboarding process is started.
+
+    ### Benefits: <!-- omit in toc -->
+    - **Streamlined Processes**: Integrates seamlessly into existing business applications, simplifying user workflows.
+    - **Automation**: Reduces the need for manual site creation, freeing up time for more strategic tasks.
+    - **Customization**: Allows for tailored site provisioning processes that meet specific business needs.
+
+## Prerequisites <!-- omit in toc -->
 
 - [PowerShell 5.1 or later](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
 - [PnP.PowerShell module](https://pnp.github.io/powershell/articles/installation.html)
